@@ -1,0 +1,9 @@
+version: "3.8"
+
+services:
+  abdullahozmenvinc-frontend:
+    build: .
+    container_name: abdullahozmenvinc-frontend
+    ports:
+      - "3004:80"
+    restart: unless-stopped
