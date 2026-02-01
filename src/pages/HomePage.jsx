@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Helmet } from 'react-helmet';
 import { motion } from 'framer-motion';
 import { Truck, Shield, Clock, Anchor, Settings, Building2 } from 'lucide-react';
@@ -6,8 +6,8 @@ import { Link } from 'react-router-dom';
 import ServiceCard from '@/components/ServiceCard';
 import HeroSlideshow from '@/components/HeroSlideshow';
 
-
 const HomePage = () => {
+    // BURASI: services dizisi eksik olduğu için hata alıyordun
     const services = [
         {
             icon: Truck,
@@ -31,6 +31,7 @@ const HomePage = () => {
         }
     ];
 
+    // BURASI: features dizisi
     const features = [
         {
             icon: Shield,
@@ -61,66 +62,61 @@ const HomePage = () => {
         <>
             <Helmet>
                 <title>ÖzmenVinç - Profesyonel Vinç Kiralama ve Ağır Yük Taşıma</title>
-                <meta name="description" content="Profesyonel vinç kiralama, ağır yük taşıma ve inşaat destek hizmetleri. Güvenilir, hızlı ve sertifikalı çözümler." />
-
+                <meta name="description" content="Profesyonel vinç kiralama, ağır yük taşıma ve inşaat destek hizmetleri." />
             </Helmet>
 
-            {/* Hero Section */}
-            <section className="relative h-screen min-h-[600px] flex items-center">
-                <div className="absolute inset-0 z-0">
+            {/* --- HERO SECTION --- */}
+            <section className="relative bg-black pt-24 overflow-hidden">
+                <div className="container mx-auto px-4 mb-12">
+                    <motion.div
+                        initial={{ opacity: 0, y: 30 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.8 }}
+                        className="text-center max-w-4xl mx-auto"
+                    >
+                        <div className="inline-block bg-yellow-500/20 text-yellow-500 px-4 py-2 rounded-full text-xs font-bold uppercase tracking-[0.2em] mb-6 border border-yellow-500/30">
+                            Özmen Vinç Çözümleri
+                        </div>
+                        <h1 className="text-4xl md:text-7xl font-black text-white mb-6 leading-tight italic uppercase">
+                            Profesyonel <br />
+                            <span className="text-yellow-500">Kaldırma Sistemleri</span>
+                        </h1>
+                        <p className="text-lg md:text-xl text-gray-400 mb-8 max-w-2xl mx-auto leading-relaxed">
+                            En zorlu kaldırma ve taşıma projelerinizde, deneyimli ekibimiz ve modern filomuzla Türkiye'nin her yerindeyiz.
+                        </p>
+                    </motion.div>
+                </div>
+
+                {/* Kayankartlar (HeroSlideshow) */}
+                <div className="relative w-full h-[70vh] md:h-[80vh]">
                     <HeroSlideshow />
                 </div>
 
-                <div className="container mx-auto px-4 relative z-10 pt-20">
-                    <motion.div
-                        initial={{ opacity: 0, y: 50 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.8 }}
-                        className="max-w-3xl"
-                    >
-                        <div className="inline-block bg-crane-orange/20 text-crane-orange px-4 py-2 rounded-full text-sm font-bold uppercase tracking-wider mb-6 border border-crane-orange/30">
-                            Özmen Vinç Çözümleri
-                        </div>
-                        <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight">
-                            Profesyonel <br />
-                            <span className="text-crane-orange">Vinç Hizmetleri</span>
-                        </h1>
-                        <p className="text-xl text-gray-300 mb-10 max-w-xl leading-relaxed">
-                            En zorlu kaldırma ve taşıma projelerinizde, deneyimli ekibimiz ve güçlü filomuzla yanınızdayız.
-                        </p>
-                        <div className="flex flex-col sm:flex-row gap-4">
-                            <Link to="/about-contact">
-                                <motion.button
-                                    whileHover={{ scale: 1.05 }}
-                                    whileTap={{ scale: 0.95 }}
-                                    className="bg-crane-orange text-white px-8 py-4 rounded-lg font-bold text-lg uppercase tracking-wide hover:bg-[#b35900] transition-colors w-full sm:w-auto"
-                                >
-                                    Hemen Teklif Al
-                                </motion.button>
-                            </Link>
-                            <motion.button
-                                whileHover={{ scale: 1.05, backgroundColor: "rgba(255, 255, 255, 0.1)" }}
-                                whileTap={{ scale: 0.95 }}
-                                onClick={handleScrollToServices}
-                                className="bg-transparent border-2 border-white text-white px-8 py-4 rounded-lg font-bold text-lg uppercase tracking-wide hover:border-crane-orange hover:text-crane-orange transition-colors w-full sm:w-auto"
-                            >
-                                Hizmetlerimiz
-                            </motion.button>
-                        </div>
-                    </motion.div>
+                {/* Alt Butonlar */}
+
+                {/*  <div className="container mx-auto px-4 relative -translate-y-1/2 z-20 flex justify-center gap-4">
+                    <Link to="/about-contact">
+                        <motion.button
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                            className="bg-yellow-500 text-black px-10 py-4 rounded-full font-black text-sm uppercase tracking-widest hover:bg-yellow-400 transition-colors shadow-2xl"
+                        >
+                            Hemen Teklif Al
+                        </motion.button>
+                    </Link>
                 </div>
+                */ }
+
             </section>
 
-            {/* Services Section */}
-            <section id="services" className="py-24 bg-black relative">
+            {/* --- SERVICES SECTION --- */}
+            <section id="services" className="py-24 bg-[#0a0a0a] relative">
                 <div className="container mx-auto px-4">
                     <div className="text-center mb-16">
-                        <h2 className="text-3xl md:text-5xl font-bold text-white mb-4">
-                            Hizmet<span className="text-crane-orange">lerimiz</span>
+                        <h2 className="text-3xl md:text-5xl font-black text-white mb-4 italic uppercase">
+                            Hizmet<span className="text-yellow-500">lerimiz</span>
                         </h2>
-                        <p className="text-gray-400 max-w-2xl mx-auto">
-                            İhtiyacınıza yönelik geniş kapsamlı kaldırma ve taşıma çözümleri sunuyoruz.
-                        </p>
+                        <div className="h-1 w-20 bg-yellow-500 mx-auto mb-6"></div>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -131,68 +127,60 @@ const HomePage = () => {
                 </div>
             </section>
 
-            {/* Why Choose Us */}
-            <section className="py-24 bg-crane-darkGray">
+            {/* --- WHY CHOOSE US --- */}
+            <section className="py-24 bg-black border-y border-zinc-900">
                 <div className="container mx-auto px-4">
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
                         <div>
-                            <h2 className="text-3xl md:text-5xl font-bold text-white mb-6">
-                                Neden Bizi <br />
-                                <span className="text-crane-orange">Tercih Etmelisiniz?</span>
+                            <h2 className="text-3xl md:text-5xl font-black text-white mb-6 uppercase italic leading-none">
+                                Neden <br />
+                                <span className="text-yellow-500">Bizi Seçmelisiniz?</span>
                             </h2>
-                            <p className="text-gray-400 mb-8 text-lg leading-relaxed">
-                                20 yılı aşkın tecrübemizle, sektördeki en güvenilir çözüm ortağınız olmayı hedefliyoruz. Her projede mükemmelliği ve güvenliği ön planda tutuyoruz.
-                            </p>
-
-                            <div className="space-y-8">
+                            <div className="space-y-6">
                                 {features.map((feature, index) => (
                                     <motion.div
                                         key={index}
                                         initial={{ opacity: 0, x: -20 }}
                                         whileInView={{ opacity: 1, x: 0 }}
-                                        transition={{ delay: index * 0.2 }}
+                                        transition={{ delay: index * 0.1 }}
                                         viewport={{ once: true }}
-                                        className="flex items-start"
+                                        className="flex items-center p-4 rounded-xl bg-zinc-900/50 border border-zinc-800"
                                     >
-                                        <div className="bg-black p-3 rounded-lg border border-gray-800 mr-4">
-                                            <feature.icon className="w-6 h-6 text-crane-orange" />
+                                        <div className="bg-yellow-500 p-3 rounded-lg mr-5">
+                                            <feature.icon className="w-6 h-6 text-black" />
                                         </div>
                                         <div>
-                                            <h3 className="text-xl font-bold text-white mb-2">{feature.title}</h3>
-                                            <p className="text-gray-400">{feature.desc}</p>
+                                            <h3 className="text-lg font-bold text-white uppercase italic">{feature.title}</h3>
+                                            <p className="text-sm text-gray-500">{feature.desc}</p>
                                         </div>
                                     </motion.div>
                                 ))}
                             </div>
                         </div>
 
-                        <div className="relative">
-                            <div className="absolute -inset-4 bg-crane-orange/20 rounded-xl blur-lg" />
+                        <div className="relative group">
+                            <div className="absolute -inset-2 bg-yellow-500/20 rounded-3xl blur-2xl opacity-50 transition duration-1000" />
                             <img
                                 src="https://images.unsplash.com/photo-1541888946425-d81bb19240f5?q=80&w=2070&auto=format&fit=crop"
-                                alt="Vinç Operasyonu"
-                                className="relative rounded-xl shadow-2xl border border-gray-800 w-full object-cover h-[600px]"
+                                alt="Özmen Vinç"
+                                className="relative rounded-2xl shadow-2xl border border-zinc-800 w-full object-cover h-[500px]"
                             />
                         </div>
                     </div>
                 </div>
             </section>
 
-            {/* CTA Section */}
-            <section className="py-20 bg-crane-orange relative overflow-hidden">
-                <div className="absolute inset-0 bg-pattern opacity-10" />
-                <div className="container mx-auto px-4 relative z-10 text-center">
-                    <h2 className="text-4xl md:text-5xl font-bold text-white mb-8">
-                        Projeniz İçin Hazırız
+            {/* --- CTA SECTION --- */}
+            <section className="py-24 bg-yellow-500 relative overflow-hidden text-center">
+                <div className="container mx-auto px-4 relative z-10">
+                    <h2 className="text-4xl md:text-6xl font-black text-black mb-6 uppercase italic">
+                        Yükünüzü Biz Kaldıralım
                     </h2>
-                    <p className="text-white/90 text-xl mb-10 max-w-2xl mx-auto">
-                        Hemen iletişime geçin, uzman ekibimiz projeniz için en uygun çözümü ve fiyat teklifini sunsun.
-                    </p>
                     <Link to="/about-contact">
                         <motion.button
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
-                            className="bg-black text-white px-10 py-5 rounded-lg font-bold text-lg uppercase tracking-wide hover:bg-gray-900 transition-colors shadow-2xl"
+                            className="bg-black text-yellow-500 px-12 py-5 rounded-full font-black text-lg uppercase tracking-widest shadow-2xl"
                         >
                             İletişime Geçin
                         </motion.button>
