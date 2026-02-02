@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const images = [
     { id: 1, url: "/image1.jpg", title: "Endüstriyel Çözümler" },
@@ -11,62 +11,77 @@ const images = [
 ];
 
 const HeroSlideshow = () => {
-    // Başlangıçta ilk kartın açık olması için 0 indeksini veriyoruz
     const [expandedIndex, setExpandedIndex] = useState(0);
 
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setExpandedIndex(prev => (prev === images.length - 1 ? 0 : prev + 1));
+        }, 4000); // 4 saniye daha akıcı bir geçiş sağlar
+        return () => clearInterval(interval);
+    }, []);
+
     return (
-        <div className="flex w-full h-screen p-4 gap-4 bg-zinc-950 items-center justify-center overflow-hidden">
+        <div className="flex flex-col md:flex-row w-full h-[600px] md:h-[550px] gap-3">
             {images.map((image, index) => (
                 <motion.div
                     key={image.id}
                     layout
                     onClick={() => setExpandedIndex(index)}
-                    initial={false}
-                    animate={{
-                        flex: expandedIndex === index ? 5 : 1,
-                    }}
-                    transition={{
-                        duration: 0.6,
-                        ease: [0.16, 1, 0.3, 1] // Custom cubic-bezier for smooth expansion
-                    }}
-                    className="relative h-[500px] min-w-[60px] cursor-pointer overflow-hidden rounded-2xl group"
+                    className={`relative cursor-pointer overflow-hidden rounded-xl transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+                        expandedIndex === index
+                        ? 'flex-[6] md:flex-[10]' // Mobilde ve masaüstünde aktif olanın büyüklüğü
+                        : 'flex-[1] md:flex-[1]'  // Pasif olanlar
+                    }`}
                 >
-                    {/* Görsel */}
-                    <img
+                    <motion.img
+                        layout
                         src={image.url}
                         alt={image.title}
-                        className="absolute inset-0 w-full h-full object-cover"
+                        className="absolute inset-0 w-full h-full object-cover select-none"
                     />
 
-                    {/* Karartma Katmanı */}
-                    <div className={`absolute inset-0 bg-black/30 transition-opacity duration-500
-                        ${expandedIndex === index ? 'opacity-20' : 'opacity-60'}`}
-                    />
+                    {/* Overlay: Aktif olmayanda daha koyu, aktifte daha şeffaf */}
+                    <div className={`absolute inset-0 transition-colors duration-700 ${
+                        expandedIndex === index ? 'bg-black/10' : 'bg-black/60 hover:bg-black/40'
+                    }`} />
 
-                    {/* İçerik (Sadece genişlediğinde görünür) */}
-                    <div className="absolute bottom-10 left-10 right-10 z-20 whitespace-nowrap">
-                        <motion.h3
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{
-                                opacity: expandedIndex === index ? 1 : 0,
-                                y: expandedIndex === index ? 0 : 20
-                            }}
-                            transition={{ delay: 0.2 }}
-                            className="text-white text-2xl font-bold uppercase tracking-wider"
-                        >
-                            {image.title}
-                        </motion.h3>
+                    {/* Yazı Alanı */}
+                    <div className="absolute bottom-0 left-0 w-full p-6 z-20">
+                        <AnimatePresence mode="wait">
+                            {expandedIndex === index ? (
+                                <motion.div
+                                    initial={{ opacity: 0, x: -20 }}
+                                    animate={{ opacity: 1, x: 0 }}
+                                    exit={{ opacity: 0 }}
+                                    className="flex items-center gap-4"
+                                >
+                                    <div className="w-10 h-1 bg-yellow-500" />
+                                    <h3 className="text-white text-xl md:text-3xl font-black uppercase italic tracking-tighter">
+                                        {image.title}
+                                    </h3>
+                                </motion.div>
+                            ) : (
+                                // Dikey yazı - Sadece Masaüstünde
+                                <motion.p
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 0.5 }}
+                                    className="hidden md:block absolute bottom-24 left-1/2 -translate-x-1/2 [writing-mode:vertical-lr] rotate-180 text-white font-bold uppercase tracking-widest text-[10px] whitespace-nowrap"
+                                >
+                                    {image.title}
+                                </motion.p>
+                            )}
+                        </AnimatePresence>
                     </div>
 
-                    {/* Dikey Başlık (Kart kapalıyken yan duran yazı) */}
-                    {expandedIndex !== index && (
-                        <motion.p
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            className="absolute bottom-10 left-1/2 -translate-x-1/2 [writing-mode:vertical-lr] rotate-180 text-white/50 font-medium uppercase tracking-widest"
-                        >
-                            {image.title}
-                        </motion.p>
+                    {/* Alt Çizgi Progress Bar (Sadece Aktif Olanda) */}
+                    {expandedIndex === index && (
+                        <motion.div
+                            layoutId="progress-bar"
+                            className="absolute bottom-0 left-0 h-1.5 bg-yellow-500 z-30"
+                            initial={{ width: 0 }}
+                            animate={{ width: '100%' }}
+                            transition={{ duration: 4, ease: "linear" }}
+                        />
                     )}
                 </motion.div>
             ))}
