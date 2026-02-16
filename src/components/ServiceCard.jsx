@@ -1,35 +1,60 @@
 import React from 'react';
-import { motion } from 'framer-motion';
-import { ArrowRight } from 'lucide-react';
+import { motion, useMotionValue, useMotionTemplate } from 'framer-motion';
 
 const ServiceCard = ({ icon: Icon, title, description, index }) => {
+    // Fare konumunu takip eden değerler
+    const mouseX = useMotionValue(0);
+    const mouseY = useMotionValue(0);
+
+    // Fare hareketini yakalayan fonksiyon
+    const handleMouseMove = ({ currentTarget, clientX, clientY }) => {
+        const { left, top } = currentTarget.getBoundingClientRect();
+        mouseX.set(clientX - left);
+        mouseY.set(clientY - top);
+    };
+
+    // Spotlight maskesi (Sarı yerine Kırmızı gradyan)
+    const background = useMotionTemplate`
+        radial-gradient(
+            400px circle at ${mouseX}px ${mouseY}px,
+            rgba(220, 38, 38, 0.15),
+            transparent 80%
+        )
+    `;
+
     return (
         <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.1, duration: 0.5 }}
             viewport={{ once: true }}
-            className="group relative bg-crane-darkGray border border-gray-800 p-8 rounded-xl overflow-hidden hover:border-crane-orange transition-colors duration-300"
+            onMouseMove={handleMouseMove}
+            className="group relative bg-[#0d0d0d] border border-zinc-800/50 p-8 rounded-2xl overflow-hidden transition-all duration-300 hover:border-red-600/50"
         >
-            <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-crane-orange/10 to-transparent rounded-bl-full -mr-8 -mt-8 transition-transform group-hover:scale-150 duration-500" />
+            {/* Spotlight Katmanı (Kırmızı Işık) */}
+            <motion.div
+                className="pointer-events-none absolute -inset-px rounded-2xl opacity-0 group-hover:opacity-100 transition duration-300"
+                style={{ background }}
+            />
 
             <div className="relative z-10">
-                <div className="w-14 h-14 bg-black border border-gray-800 rounded-lg flex items-center justify-center mb-6 group-hover:border-crane-orange group-hover:text-crane-orange transition-colors duration-300">
-                    <Icon className="w-7 h-7 text-white group-hover:text-crane-orange transition-colors" />
+                {/* İkon Kutusu */}
+                <div className="w-16 h-16 bg-black border border-zinc-800 rounded-xl flex items-center justify-center mb-6 group-hover:border-red-600 group-hover:shadow-[0_0_20px_rgba(220,38,38,0.2)] transition-all duration-300">
+                    <Icon className="w-8 h-8 text-white group-hover:text-red-600 transition-colors" />
                 </div>
 
-                <h3 className="text-xl font-bold text-white mb-3 group-hover:text-crane-orange transition-colors">
+                {/* Başlık */}
+                <h3 className="text-xl font-black text-white mb-3 uppercase tracking-wide group-hover:text-red-600 transition-colors">
                     {title}
                 </h3>
-                {/* Description and "Detaylı Bilgi" button removed as per Task 1 */}
-                {/* <p className="text-gray-400 mb-6 leading-relaxed">
-          {description}
-        </p>
 
-        <div className="flex items-center text-sm font-semibold text-white group-hover:text-crane-orange transition-colors cursor-pointer">
-          Detaylı Bilgi
-          <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
-        </div> */}
+                {/* Açıklama */}
+                <p className="text-gray-500 text-sm leading-relaxed group-hover:text-gray-300 transition-colors">
+                    {description}
+                </p>
+
+                {/* Alt Köşe Süslemesi (Kırmızı Glow) */}
+                <div className="absolute -bottom-2 -right-2 w-12 h-12 bg-red-600/5 rounded-full blur-2xl group-hover:bg-red-600/20 transition-all duration-500" />
             </div>
         </motion.div>
     );

@@ -1,187 +1,168 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import { Helmet } from 'react-helmet';
 import { motion } from 'framer-motion';
-import { Phone, Mail, MapPin, Send, MessageSquare, Code2 } from 'lucide-react';
-import ContactInfoCard from '@/components/ContactInfoCard';
-import { useToast } from '@/components/ui/use-toast';
-import { Button } from '@/components/ui/button';
-import emailjs from '@emailjs/browser';
+import { Phone, MapPin, MessageSquare, Code2, Heart } from 'lucide-react';
+import {FaWhatsapp} from "react-icons/fa";
 
 const AboutContact = () => {
-    const { toast } = useToast();
-    const form = useRef();
-    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [hoverSide, setHoverSide] = useState(null);
 
-    const sendEmail = (e) => {
-        e.preventDefault();
-        setIsSubmitting(true);
-
-        // EmailJS bilgilerini buraya girin: https://www.emailjs.com/
-        emailjs.sendForm(
-            'service_u6852dd',
-            'template_564ay25',
-            form.current,
-            'YOUR_PUBLIC_KEY'
-        )
-            .then((result) => {
-                toast({
-                    title: "Mesajınız İletildi!",
-                    description: "Tasarım talebiniz tasarımcıya başarıyla ulaştırıldı.",
-                });
-                e.target.reset();
-            }, (error) => {
-                toast({
-                    variant: "destructive",
-                    title: "Hata!",
-                    description: "Mesaj gönderilirken bir sorun oluştu.",
-                });
-            })
-            .finally(() => setIsSubmitting(false));
-    };
+    const aboutSteps = [
+        {
+            title: "Ustalık Mirası",
+            desc: "Yılların verdiği tecrübe ile her bıçak darbesinde aynı kaliteyi ve özeni sofralarınıza taşıyoruz.",
+            img: "https://images.unsplash.com/photo-1558030006-450675393462?q=80&w=2070"
+        },
+        {
+            title: "Doğal Besi",
+            desc: "Sadece meralarda doğal beslenen, veteriner onaylı hayvanları seçiyor, sağlığınızı önceliğimiz yapıyoruz.",
+            img: "https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=2069"
+        },
+        {
+            title: "Modern Hijyen",
+            desc: "Geleneksel lezzeti, en modern soğuk zincir ve hijyen standartlarıyla harmanlayarak sunuyoruz.",
+            img: "https://images.unsplash.com/photo-1500595046743-cd271d694d30?q=80&w=2070"
+        }
+    ];
 
     return (
-        <>
+        <div className="bg-black text-white overflow-x-hidden">
             <Helmet>
-                <title>Hakkımızda ve İletişim - ProVinç</title>
-                <meta name="description" content="ProVinç hakkında detaylı bilgi ve iletişim kanalları." />
+                <title>Hakkımızda ve İletişim - Tunç Kasap</title>
             </Helmet>
 
-            {/* About Header */}
-            <section className="bg-crane-darkGray py-20 border-b border-gray-800">
-                <div className="container mx-auto px-4 text-center">
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        className="max-w-4xl mx-auto"
-                    >
-                        <h1 className="text-4xl md:text-6xl font-bold text-white mb-6">
-                            Gücümüzü <span className="text-crane-orange">Tecrübemizden</span> Alıyoruz
-                        </h1>
-                        <p className="text-xl text-gray-400 leading-relaxed">
-                            2005 yılından bu yana inşaat ve lojistik sektörlerine profesyonel çözümler sunuyoruz.
-                        </p>
-                    </motion.div>
+            {/* --- HAKKIMIZDA BÖLÜMÜ --- */}
+            <section className="relative flex flex-col lg:flex-row bg-zinc-950">
+                {/* Sol Metin Alanı */}
+                <div className="w-full lg:w-1/2 px-6 md:px-24 py-20 lg:py-32">
+                    {aboutSteps.map((step, i) => (
+                        <div key={i} className="min-h-[40vh] lg:min-h-[50vh] flex flex-col justify-center mb-20 lg:mb-32 last:mb-0">
+                            <motion.span
+                                initial={{ opacity: 0 }}
+                                whileInView={{ opacity: 1 }}
+                                className="text-red-600 font-black mb-4 block tracking-widest text-sm"
+                            >
+                                BÖLÜM 0{i + 1}
+                            </motion.span>
+
+                            {/* Mobilde Gözükecek Görsel */}
+                            <motion.div
+                                initial={{ opacity: 0, scale: 0.95 }}
+                                whileInView={{ opacity: 1, scale: 1 }}
+                                className="w-full h-64 mb-8 rounded-2xl overflow-hidden lg:hidden"
+                            >
+                                <img src={step.img} alt={step.title} className="w-full h-full object-cover" />
+                            </motion.div>
+
+                            <motion.h2
+                                initial={{ opacity: 0, y: 20 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                className="text-3xl md:text-6xl font-black uppercase mb-6 leading-tight"
+                            >
+                                {step.title}
+                            </motion.h2>
+                            <motion.p
+                                initial={{ opacity: 0 }}
+                                whileInView={{ opacity: 1 }}
+                                className="text-gray-400 text-base md:text-xl leading-relaxed max-w-md"
+                            >
+                                {step.desc}
+                            </motion.p>
+                        </div>
+                    ))}
+                </div>
+
+                {/* Sağ Sabit Görsel Alanı (Sadece Masaüstü) */}
+                <div className="hidden lg:block w-1/2 h-screen sticky top-0 overflow-hidden border-l border-white/5">
+                    {aboutSteps.map((step, i) => (
+                        <motion.div
+                            key={i}
+                            initial={{ opacity: 0 }}
+                            whileInView={{ opacity: 1 }}
+                            viewport={{ margin: "-20% 0px -20% 0px" }}
+                            className="absolute inset-0"
+                        >
+                            <img src={step.img} alt={step.title} className="w-full h-full object-cover grayscale brightness-50 hover:grayscale-0 hover:brightness-100 transition-all duration-1000" />
+                            <div className="absolute inset-0 bg-gradient-to-r from-zinc-950 via-transparent to-transparent" />
+                        </motion.div>
+                    ))}
                 </div>
             </section>
 
-            <section className="py-20 bg-black">
-                <div className="container mx-auto px-4">
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+            {/* --- İLETİŞİM BÖLÜMÜ (RESPONSIVE SPLIT) --- */}
+            <section className="relative h-screen md:h-[70vh] flex flex-col md:flex-row overflow-hidden border-t border-zinc-900">
 
-                        {/* Tasarımcı İletişim Formu */}
-                        <motion.div
-                            initial={{ opacity: 0, x: -30 }}
-                            whileInView={{ opacity: 1, x: 0 }}
-                            viewport={{ once: true }}
-                            className="bg-crane-darkGray p-8 md:p-12 rounded-2xl border border-crane-orange/30 shadow-lg shadow-orange-900/5"
-                        >
-                            <div className="flex items-center gap-3 mb-4">
-                                <Code2 className="text-crane-orange w-8 h-8" />
-                                <h2 className="text-3xl font-bold text-white">Sayfa Tasarımı İçin</h2>
-                            </div>
-                            <p className="text-gray-400 mb-8">
-                                Bu web sitesi gibi profesyonel bir tasarım projeniz varsa, doğrudan tasarımcı ile iletişime geçebilirsiniz.
-                            </p>
+                {/* Tasarımcı Alanı */}
+                <motion.div
+                    onMouseEnter={() => setHoverSide('designer')}
+                    onMouseLeave={() => setHoverSide(null)}
+                    animate={{
+                        width: typeof window !== 'undefined' && window.innerWidth > 768
+                            ? (hoverSide === 'designer' ? '70%' : hoverSide === 'company' ? '30%' : '50%')
+                            : '100%',
+                        height: typeof window !== 'undefined' && window.innerWidth <= 768
+                            ? (hoverSide === 'designer' ? '60%' : hoverSide === 'company' ? '40%' : '50%')
+                            : '100%'
+                    }}
+                    className="relative flex flex-col items-center justify-center p-8 md:p-12 bg-zinc-900 border-b md:border-b-0 md:border-r border-zinc-800 transition-all duration-500 overflow-hidden"
+                >
+                    <div className="relative z-10 text-center">
+                        <Code2 className="w-12 h-12 md:w-16 md:h-16 text-red-600 mx-auto mb-4 md:mb-6" />
+                        <h3 className="text-xl md:text-4xl font-black uppercase mb-2 md:mb-4 tracking-tighter">Dijital Tasarım</h3>
+                        <p className={`text-gray-400 text-sm md:text-base mb-6 md:mb-8 transition-opacity duration-300 ${hoverSide === 'company' ? 'opacity-0' : 'opacity-100'}`}>
+                            Projenin dijital mimarı ile iletişime geçin.
+                        </p>
+                        <a href="https://wa.me/905459266026" className="inline-flex bg-white text-black px-6 py-3 md:px-8 md:py-3 rounded-full font-bold uppercase text-xs md:text-sm hover:scale-105 transition-transform items-center gap-2">
+                            <MessageSquare className="w-4 h-4" /> Geliştirici
+                        </a>
+                    </div>
+                </motion.div>
 
-                            <form ref={form} onSubmit={sendEmail} className="space-y-6">
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-300 mb-2">Adınız</label>
-                                    <input
-                                        type="text"
-                                        name="name"
-                                        required
-                                        className="w-full bg-black border border-gray-800 rounded-lg px-4 py-3 text-white focus:border-crane-orange transition-colors"
-                                        placeholder="Mehmet Yılmaz"
-                                    />
-                                </div>
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-300 mb-2">E-posta Adresiniz</label>
-                                    <input
-                                        type="email"
-                                        name="email"
-                                        required
-                                        className="w-full bg-black border border-gray-800 rounded-lg px-4 py-3 text-white focus:border-crane-orange transition-colors"
-                                        placeholder="iletisim@tasarimci.com"
-                                    />
-                                </div>
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-300 mb-2">Tasarım Talebiniz</label>
-                                    <textarea
-                                        name="message"
-                                        required
-                                        rows={4}
-                                        className="w-full bg-black border border-gray-800 rounded-lg px-4 py-3 text-white focus:border-crane-orange transition-colors resize-none"
-                                        placeholder="Nasıl bir web sitesi hayal ediyorsunuz?"
-                                    />
-                                </div>
-                                <Button
-                                    type="submit"
-                                    disabled={isSubmitting}
-                                    className="w-full bg-crane-orange hover:bg-orange-700 text-white font-bold py-6 rounded-lg text-lg uppercase transition-all"
-                                >
-                                    {isSubmitting ? 'Gönderiliyor...' : 'Tasarımcıya Ulaş'}
-                                    {!isSubmitting && <Send className="ml-2 w-5 h-5" />}
-                                </Button>
-                            </form>
-                        </motion.div>
+                {/* Şirket Alanı */}
+                <motion.div
+                    onMouseEnter={() => setHoverSide('company')}
+                    onMouseLeave={() => setHoverSide(null)}
+                    animate={{
+                        width: typeof window !== 'undefined' && window.innerWidth > 768
+                            ? (hoverSide === 'company' ? '70%' : hoverSide === 'designer' ? '30%' : '50%')
+                            : '100%',
+                        height: typeof window !== 'undefined' && window.innerWidth <= 768
+                            ? (hoverSide === 'company' ? '60%' : hoverSide === 'designer' ? '40%' : '50%')
+                            : '100%'
+                    }}
+                    className="relative flex flex-col items-center justify-center p-8 md:p-12 bg-red-600 transition-all duration-500 overflow-hidden"
+                >
+                    <div className="relative z-10 text-center text-white">
+                        <Heart className="w-12 h-12 md:w-16 md:h-16 text-white mx-auto mb-4 md:mb-6" />
+                        <h3 className="text-xl md:text-4xl font-black uppercase mb-2 md:mb-4 tracking-tighter">Tunç Kasap</h3>
+                        <p className={`text-white/80 text-sm md:text-base mb-6 md:mb-8 transition-opacity duration-300 ${hoverSide === 'designer' ? 'opacity-0' : 'opacity-100'}`}>
+                            Sipariş hattı ve konum bilgisi.
+                        </p>
+                        <div className="flex flex-col gap-3 items-center">
 
-                        {/* Şirket İletişim Bilgileri (Aynen Kaldı) */}
-                        <motion.div
-                            initial={{ opacity: 0, x: 30 }}
-                            whileInView={{ opacity: 1, x: 0 }}
-                            viewport={{ once: true }}
-                            className="space-y-8"
-                        >
-                            <div className="grid gap-6">
-                                <ContactInfoCard
-                                    icon={Phone}
-                                    title="WhatsApp & Telefon"
-                                    value="+90 533 485 11 55"
-                                    link="https://wa.me/905334851155"
-                                    actionText="WhatsApp'tan Yazın"
-                                />
-
-                                <ContactInfoCard
-                                    icon={MapPin}
-                                    title="Merkez Ofis"
-                                    // Google Maps'ten gelen gerçek adres verisi
-                                    value="Dökmeciler sanayi sitesi, Bahçekapı, 2492. Cd. no 1 /11, 06560 Etimesgut/Ankara"
-                                    // İşletmenin doğrudan Google Maps üzerindeki resmi sayfası ve yol tarifi linki
-                                    link="https://maps.app.goo.gl/DCz6bJZeuHnPHpHQ7"
-                                    actionText="Yol Tarifi Al"
-                                />
-                            </div>
-
-                            {/* Map */}
-                            <div className="bg-crane-darkGray p-2 rounded-2xl border border-gray-800 h-[300px] overflow-hidden relative group">
-                                <iframe
-                                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3007.447543888796!2d28.79051!3d41.07728!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNDHCsDA0JzM4LjIiTiAyOMKwNDcnMjUuOCJF!5e0!3m2!1str!2str!4v1635848000000!5m2!1str!2str"
-                                    width="100%"
-                                    height="100%"
-                                    style={{border:0}}
-                                    allowFullScreen=""
-                                    loading="lazy"
-                                    className="grayscale hover:grayscale-0 transition-all duration-500 rounded-xl"
-                                ></iframe>
-                            </div>
-
-                            {/* WhatsApp Button */}
                             <a
-                                href="https://wa.me/905334851155"
+                                href="https://wa.me/905315839361"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="block"
+                                className="bg-black text-white px-6 py-3 md:px-8 md:py-3 rounded-full font-bold uppercase text-xs md:text-sm hover:scale-105 transition-transform flex items-center gap-2"
                             >
-                                <div className="bg-[#25D366] hover:bg-[#20bd5a] text-white p-4 rounded-xl flex items-center justify-center font-bold text-lg transition-colors shadow-lg shadow-green-900/20">
-                                    <MessageSquare className="w-6 h-6 mr-2" />
-                                    WhatsApp Destek Hattı
-                                </div>
+                                <FaWhatsapp className="w-4 h-4" />
+                                İletişime Geç
                             </a>
-                        </motion.div>
+
+
+                        </div>
                     </div>
-                </div>
+                </motion.div>
+
+                {/* Orta Ayırıcı Yazı */}
+                {!hoverSide && (
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-black border border-zinc-800 px-6 py-2 rounded-full text-xs font-black uppercase tracking-widest hidden md:block z-20">
+                        Seçiminizi Yapın
+                    </div>
+                )}
             </section>
-        </>
+        </div>
     );
 };
 

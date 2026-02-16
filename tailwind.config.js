@@ -23,10 +23,10 @@ module.exports = {
                 background: 'hsl(var(--background))',
                 foreground: 'hsl(var(--foreground))',
                 crane: {
-                    black: '#000000',
-                    orange: '#CC6600',
-                    darkGray: '#1A1A1A',
-                    lightGray: '#E0E0E0',
+                    black: '#a51d1d',  //#000000
+                    orange: '#b5a89b',  //#CC6600
+                    darkGray: '#1a5c85', // #1A1A1A
+                    lightGray: '#752323', // #E0E0E0
                 },
                 primary: {
                     DEFAULT: 'hsl(var(--primary))',
